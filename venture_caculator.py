@@ -1608,3 +1608,85 @@ def calculate_and_show_results():
 # 결과가 계산된 상태라면 결과를 표시 (메인 화면 버튼 클릭으로만 결과 표시)
 if st.session_state.show_result:
     calculate_and_show_results()
+
+# 모바일 디바이스 체크 함수 추가
+def is_mobile():
+    import streamlit as st
+    # User-Agent를 확인하여 모바일 여부 판단
+    try:
+        import re
+        user_agent = st.get_user_agent()
+        return bool(re.search(r'Mobile|Android|iPhone|iPad', user_agent))
+    except:
+        return False
+
+# 계산하기 버튼 클릭 시 실행될 콜백 함수
+def on_calculate_button_click():
+    st.session_state.show_result = True
+    # 모바일에서만 사이드바 자동으로 닫기
+    if is_mobile():
+        st.session_state.sidebar_state = "collapsed"
+
+# 세션 상태 초기화
+if 'sidebar_state' not in st.session_state:
+    st.session_state.sidebar_state = "expanded"
+
+# 페이지 설정 업데이트
+st.set_page_config(
+    page_title="벤처투자 소득공제 시뮬레이터",
+    page_icon="💰",
+    layout="wide",
+    initial_sidebar_state=st.session_state.sidebar_state
+)
+
+# 모바일 최적화를 위한 JavaScript 추가
+mobile_optimization_js = """
+<script>
+function hideSidebarOnMobile() {
+    // 모바일 환경 체크
+    if (/Mobile|Android|iPhone|iPad/.test(navigator.userAgent)) {
+        // 사이드바 토글 버튼 찾기 및 클릭
+        const toggleButton = document.querySelector('[data-testid="baseButton-headerNoPadding"]');
+        if (toggleButton && window.location.hash === '#calculated') {
+            toggleButton.click();
+        }
+    }
+}
+
+// 페이지 로드 시 실행
+window.addEventListener('load', hideSidebarOnMobile);
+// URL 해시 변경 시 실행
+window.addEventListener('hashchange', hideSidebarOnMobile);
+</script>
+"""
+
+st.markdown(mobile_optimization_js, unsafe_allow_html=True)
+
+# 계산하기 버튼 부분 수정
+if st.button("계산하기", key="calculate_button", use_container_width=True, 
+            on_click=on_calculate_button_click,
+            type="primary"):
+    # URL 해시 업데이트를 위한 JavaScript 추가
+    st.markdown("""
+        <script>
+            window.location.hash = 'calculated';
+        </script>
+        """, 
+        unsafe_allow_html=True
+    )
+
+# 결과 표시 부분에 스크롤 위치 조정을 위한 JavaScript 추가
+if st.session_state.show_result:
+    st.markdown("""
+        <script>
+            function scrollToResults() {
+                const resultElement = document.querySelector('.main-header');
+                if (resultElement) {
+                    resultElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+            setTimeout(scrollToResults, 100);
+        </script>
+        """,
+        unsafe_allow_html=True
+    )
