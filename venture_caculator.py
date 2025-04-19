@@ -51,22 +51,58 @@ st.markdown("""
     /* 모바일 최적화 */
     @media (max-width: 768px) {
         .main-header {
-            font-size: 1.4rem !important;
-            margin-top: 1rem !important;
+            font-size: 1.3rem !important;
+            margin-top: 0.8rem !important;
+            padding: 0 0.5rem !important;
         }
+        
+        /* 테이블 스크롤 처리 */
+        .scrollable-table-container {
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            margin: 0 -1rem !important;
+            padding: 0 1rem !important;
+        }
+        
+        /* 테이블 셀 최적화 */
+        .comparison-table td,
+        .comparison-table th,
+        .deduction-analysis-table td,
+        .deduction-analysis-table th {
+            padding: 0.7rem 0.5rem !important;
+            font-size: 0.85rem !important;
+            white-space: nowrap !important;
+        }
+        
+        /* 숫자 표시 최적화 */
+        .highlight-number {
+            font-size: 0.85rem !important;
+            padding: 2px 6px !important;
+        }
+        
+        /* 결과 박스 최적화 */
         .result-box {
-            padding: 1rem !important;
+            padding: 1rem 0.8rem !important;
+            margin: 0.5rem 0 !important;
         }
-        .comparison-table td, .comparison-table th {
-            padding: 0.8rem !important;
-            font-size: 0.9rem !important;
+        
+        /* 금액 표시 최적화 */
+        .result-box p[style*="font-size:1.7rem"] {
+            font-size: 1.3rem !important;
         }
-        .highlight-box {
-            padding: 1rem !important;
+        
+        /* 설명 텍스트 최적화 */
+        .result-box p[style*="font-size:0.8rem"] {
+            font-size: 0.75rem !important;
         }
-        .total-profit {
-            font-size: 1.2rem !important;
-            padding: 1.5rem !important;
+        
+        /* 탭 내용 최적화 */
+        [data-testid="stTabs"] {
+            margin: 0 -1rem !important;
+        }
+        
+        [data-testid="stTabContent"] {
+            padding: 0 0.5rem !important;
         }
     }
     
