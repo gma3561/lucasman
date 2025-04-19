@@ -1191,6 +1191,54 @@ with st.sidebar:
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # 추가 소득공제 항목 (expander로 숨김)
+    with st.expander("👨‍👩‍👧‍👦 추가 소득공제 항목"):
+        # 부양가족 수 입력
+        st.markdown("""
+        <div style="margin-bottom: 0.5rem;">
+            <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                부양가족 수를 입력하세요 (기본공제 1인당 150만원)
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if 'dependent_count' not in st.session_state:
+            st.session_state.dependent_count = 0
+            
+        dependent_count = st.number_input(
+            "부양가족 수",
+            min_value=0,
+            value=st.session_state.dependent_count,
+            step=1,
+            format="%d",
+            key="dependent_count",
+            label_visibility="collapsed"
+        )
+        st.session_state.dependent_count = dependent_count
+        
+        # 경로우대 대상자 수 입력
+        st.markdown("""
+        <div style="margin: 1rem 0 0.5rem 0;">
+            <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                경로우대 대상자 수를 입력하세요 (추가공제 1인당 100만원)
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if 'elderly_count' not in st.session_state:
+            st.session_state.elderly_count = 0
+            
+        elderly_count = st.number_input(
+            "경로우대 대상자 수",
+            min_value=0,
+            value=st.session_state.elderly_count,
+            step=1,
+            format="%d",
+            key="elderly_count",
+            label_visibility="collapsed"
+        )
+        st.session_state.elderly_count = elderly_count
     
     # 벤처투자 관련 입력 (고정값)
     invest_amt = 30_000_000  # 3천만원 고정
