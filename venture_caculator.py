@@ -104,6 +104,44 @@ st.markdown("""
         [data-testid="stTabContent"] {
             padding: 0 0.5rem !important;
         }
+
+        /* 투자 효율성 평가 섹션 모바일 최적화 */
+        .highlight-box div {
+            text-align: center !important;
+            padding: 0.8rem !important;
+        }
+
+        .highlight-box div[style*="margin-bottom:2rem"] {
+            background-color: var(--background-light) !important;
+            border-radius: 8px !important;
+            margin: 0.8rem auto !important;
+            max-width: 90% !important;
+            padding: 1rem !important;
+        }
+
+        /* 금액 표시 스타일 */
+        .highlight-box div[style*="color:var(--text-primary)"] {
+            font-size: 1.3rem !important;
+            margin: 0.5rem 0 !important;
+        }
+
+        /* 설명 텍스트 스타일 */
+        .highlight-box div[style*="color:var(--text-secondary)"] {
+            font-size: 0.9rem !important;
+            margin: 0.3rem 0 !important;
+        }
+
+        /* 섹션 제목 스타일 */
+        .highlight-box h3[style*="font-weight:700"] {
+            font-size: 1.2rem !important;
+            margin: 1rem 0 1.5rem 0 !important;
+        }
+
+        /* 결과값 강조 스타일 */
+        .highlight-box div[style*="color:var(--positive)"] {
+            font-size: 1.4rem !important;
+            margin: 0.5rem 0 !important;
+        }
     }
     
     /* Streamlit 기본 요소 오버라이드 */
@@ -165,12 +203,21 @@ st.markdown("""
     
     /* 하이라이트 박스 */
     .highlight-box {
-        background-color: var(--background-light);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1.5rem;
-        margin: 1.5rem 0;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        background-color: var(--background) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 12px !important;
+        padding: 1.5rem !important;
+        margin: 1rem 0 !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+    }
+    
+    .highlight-box div[style*="margin-bottom:2rem"] {
+        transition: all 0.2s ease-in-out !important;
+    }
+    
+    .highlight-box div[style*="margin-bottom:2rem"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
     }
     
     /* 비교 테이블 */
