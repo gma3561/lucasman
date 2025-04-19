@@ -41,4 +41,4 @@ https://[YOUR_APP_NAME].streamlit.app
 
 ## 라이선스
 
-MIT License 
+MIT License # lucasman
