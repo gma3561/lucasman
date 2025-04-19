@@ -158,7 +158,7 @@ st.markdown("""
     
     /* 메인 헤더 */
     .main-header {
-        font-size: 1.8rem;
+        font-size: 2.8rem;
         font-weight: 700;
         margin: 1.5rem 0 1rem 0;
         color: var(--primary-dark);
@@ -329,7 +329,7 @@ st.markdown("""
     .stNumberInput input {
         border-radius: 8px !important;
         width: 100% !important;
-        padding: 0.75rem 1rem !important;
+        padding: 0.5rem 1rem !important;
         text-align: right !important;
         font-weight: 600 !important;
         font-size: 1.1rem !important;
@@ -337,6 +337,7 @@ st.markdown("""
         background-color: var(--background) !important;
         border: 1px solid var(--primary) !important;
         transition: all 0.2s ease !important;
+        height: 2.5rem !important;
     }
     
     .stNumberInput input:focus {
@@ -477,22 +478,33 @@ st.markdown("""
 
     /* 사이드바 헤더 개선 */
     .sidebar-header {
-        color: var(--primary-dark);
-        font-size: 1.4rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        text-align: center;
-        padding-bottom: 0.5rem;
-        border-bottom: 2px solid var(--primary-light);
+        color: #1E3A8A !important;
+        font-size: 1.8rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 1rem !important;
+        text-align: left !important;
+        padding: 0.7rem 1rem !important;
+        padding-bottom: 0.7rem !important;
+        background-color: #F3F4F6 !important;
+        border-radius: 8px !important;
+        border-bottom: 2px solid #E5E7EB !important;
+    }
+    
+    /* 사이드바 제목 아이콘 스타일 */
+    .sidebar-icon {
+        color: #F59E0B !important; /* 더 진한 노란색 */
+        margin-right: 0.5rem !important;
+        font-size: 1.6rem !important;
+        display: inline-block !important;
     }
 
     /* 공제 항목 타이틀 통일 */
     .deduction-title {
-        font-size: 1.1rem;
+        font-size: 1.5rem;
         font-weight: 600;
-        color: var(--primary-dark);
-        margin: 0.7rem 0;
-        padding-bottom: 0.3rem;
+        color: #000000;
+        margin: 0.9rem 0;
+        padding-bottom: 0.4rem;
     }
 
     /* 탭 버튼 가시성 개선 */
@@ -868,12 +880,13 @@ st.markdown("""
     }
     
     .stTextInput input {
-        background-color: #ffffff !important; /* 입력 필드 배경색 흰색으로 설정 */
+        background-color: #ffffff !important;
         border: 1px solid var(--border) !important;
         border-radius: 8px !important;
-        padding: 0.75rem 1rem !important;
+        padding: 0.5rem 1rem !important;
         font-size: 1.1rem !important;
         color: var(--text-primary) !important;
+        height: 2.5rem !important;
     }
     
     .stTextInput input:focus {
@@ -1028,7 +1041,11 @@ if 'show_result' not in st.session_state:
 
 # 초기 화면 표시
 if not st.session_state.show_result:
-    st.markdown('<p class="main-header">벤처투자 소득공제 시뮬레이터</p>', unsafe_allow_html=True)
+    st.markdown("""
+    <div style="font-size:2.8rem; font-weight:700; margin:1.5rem 0 1rem 0; padding:0.5rem 0; border-bottom:2px solid #E5E7EB; text-align:center; color:#1E3A8A;">
+        벤처투자 소득공제 시뮬레이터
+    </div>
+    """, unsafe_allow_html=True)
     
     # 소개 카드 레이아웃
     col1, col2, col3 = st.columns(3)
@@ -1120,23 +1137,26 @@ if not st.session_state.show_result:
 # ─────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("""
-    <h2 class="sidebar-header">
-        💰 소득 정보 입력
-    </h2>
+    <div style="background-color:#F3F4F6; padding:0.7rem 1rem; border-radius:8px; margin-bottom:1rem; border-bottom:2px solid #E5E7EB;">
+        <div style="display:flex; align-items:center;">
+            <span style="color:#F59E0B; font-size:1.6rem; margin-right:0.5rem;">💰</span>
+            <span style="color:#1E3A8A; font-size:1.8rem; font-weight:700;">소득 정보 입력</span>
+        </div>
+    </div>
     """, unsafe_allow_html=True)
     
     # 세션 상태 초기화
     if 'current_salary' not in st.session_state:
         st.session_state.current_salary = 0
         
-    # 총급여액 입력
+    # 총 급여액 입력
     st.markdown("""
     <div class="input-group">
-        <p class="deduction-title">📌 총급여액 <span class="required-field">필수</span></p>
+        <p class="deduction-title">📌 총 급여액 <span class="required-field">필수</span></p>
     </div>
     """, unsafe_allow_html=True)
     
-    # 총급여액 입력 필드
+    # 총 급여액 입력 필드
     salary = st.text_input(
         "금액을 입력하세요",
         value=format(st.session_state.current_salary, ',d') if st.session_state.current_salary > 0 else "",
@@ -1152,7 +1172,7 @@ with st.sidebar:
     # 현재 총급여액 표시
     st.markdown(f"""
         <div style="background-color:var(--primary-light); padding:1rem; border-radius:8px; margin:1rem 0; text-align:center;">
-            <p style="color:var(--text-secondary); margin:0; font-size:0.9rem;">현재 총급여액</p>
+            <p style="color:var(--text-secondary); margin:0; font-size:1.1rem;">현재 총 급여액</p>
             <p style="color:var(--primary-dark); font-size:1.4rem; font-weight:700; margin:0.3rem 0 0 0;">
                 {st.session_state.current_salary:,}원
             </p>
@@ -1187,7 +1207,7 @@ with st.sidebar:
     # 현재 연간 신용카드 사용액 표시
     st.markdown(f"""
         <div style="background-color:var(--primary-light); padding:1rem; border-radius:8px; margin:1rem 0; text-align:center;">
-            <p style="color:var(--text-secondary); margin:0; font-size:0.9rem;">연간 신용카드 사용액</p>
+            <p style="color:var(--text-secondary); margin:0; font-size:1.1rem;">연간 신용카드 사용액</p>
             <p style="color:var(--primary-dark); font-size:1.4rem; font-weight:700; margin:0.3rem 0 0 0;">
                 {st.session_state.credit_card:,}원
             </p>
@@ -1211,7 +1231,7 @@ with st.sidebar:
     # 부양가족 수 입력
     st.markdown("""
     <div style="margin-bottom:0.5rem;">
-        <p style="color:var(--text-secondary); font-size:0.9rem;">부양가족 수를 입력하세요 (기본공제 1인당 150만원)</p>
+        <p class="deduction-title">부양가족 수 (기본공제 1인당 150만원)</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1229,7 +1249,7 @@ with st.sidebar:
     # 경로우대 대상자 수 입력
     st.markdown("""
     <div style="margin-bottom:0.5rem;">
-        <p style="color:var(--text-secondary); font-size:0.9rem;">경로우대 대상자 수를 입력하세요 (추가공제 1인당 100만원)</p>
+        <p class="deduction-title">경로우대 대상자 수 (추가공제 1인당 100만원)</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -1314,6 +1334,15 @@ def calculate_credit_card_deduction(salary, credit_card_spending):
     return final_deduction
 
 def calculate_and_show_results():
+    # 사이드바 숨기기
+    st.markdown("""
+    <style>
+    [data-testid="stSidebar"] {
+        display: none;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
     # 근로소득공제 계산
     earned_income_ded = calc_earned_income_ded(st.session_state.current_salary)
     
@@ -1412,7 +1441,11 @@ def calculate_and_show_results():
     # ─── 결과 레이아웃 ───────────────────────────
     st.empty()  # 기존 내용 지우기
     
-    st.markdown('<p class="main-header">💰 벤처투자 소득공제 시뮬레이션 결과</p>', unsafe_allow_html=True)
+    st.markdown("""
+    <div style="font-size:2.8rem; font-weight:700; margin:1.5rem 0 1rem 0; padding:0.5rem 0; border-bottom:2px solid #E5E7EB; text-align:center; color:#1E3A8A;">
+        💰 벤처투자 소득공제 시뮬레이션 결과
+    </div>
+    """, unsafe_allow_html=True)
     
     # 상단 요약 정보 카드 (3단 레이아웃)
     col1, col2, col3 = st.columns(3)
@@ -1632,119 +1665,22 @@ def calculate_and_show_results():
         """, unsafe_allow_html=True)
     
     # 재계산 버튼
-    st.button("다시 계산하기", on_click=lambda: setattr(st.session_state, 'show_result', False))
-
-# 결과가 계산된 상태라면 결과를 표시 (메인 화면 버튼 클릭으로만 결과 표시)
+    st.button("다시 계산하기", on_click=reset_calculation)
+    
+# 다시 계산하기 함수 정의
+def reset_calculation():
+    # 사이드바 다시 표시
+    st.markdown("""
+    <style>
+    [data-testid="stSidebar"] {
+        display: block;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    # 결과 화면 상태 초기화
+    st.session_state.show_result = False
+    
+# 결과가 계산된 상태라면 결과를 표시
 if st.session_state.show_result and st.session_state.current_salary > 0:
     calculate_and_show_results()
-else:
-    # 초기 설명 화면 표시
-    col1, col2, col3 = st.columns(3)
     
-    with col1:
-        st.markdown("""
-        <div class="result-box">
-            <div style="text-align:center; margin-bottom:1rem;">
-                <span style="font-size:2.5rem;">💸</span>
-            </div>
-            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:1rem;">세금 절약 계산</h3>
-            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem;">
-                벤처기업 투자로 얼마나 세금을 절약할 수 있는지 계산해보세요.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div class="result-box">
-            <div style="text-align:center; margin-bottom:1rem;">
-                <span style="font-size:2.5rem;">📊</span>
-            </div>
-            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:1rem;">세율 구간 분석</h3>
-            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem;">
-                소득공제 전후의 세율 구간 변화와 한계세율 효과를 확인하세요.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div class="result-box">
-            <div style="text-align:center; margin-bottom:1rem;">
-                <span style="font-size:2.5rem;">💰</span>
-            </div>
-            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:1rem;">투자 수익성 분석</h3>
-            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem;">
-                현금 리턴과 세금 절감을 통한 최종 수익률을 확인하세요.
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
-
-# 사이드바에 추가 공제 항목 입력 섹션
-st.sidebar.markdown("""
-<div class="input-group">
-    <p class="deduction-title">👨‍👩‍👧‍👦 추가 소득공제 항목</p>
-</div>
-""", unsafe_allow_html=True)
-
-# 부양가족 수 입력
-def on_dependent_change():
-    try:
-        cleaned_text = st.session_state.dependent_text.replace(',', '')
-        if cleaned_text:
-            if cleaned_text.isdigit():
-                st.session_state.dependent_count = int(cleaned_text)
-                if st.session_state.current_salary > 0:
-                    st.session_state.show_result = True
-    except ValueError:
-        pass
-
-if 'dependent_count' not in st.session_state:
-    st.session_state.dependent_count = 0
-
-st.sidebar.markdown("""
-<div style="margin-bottom: 0.5rem;">
-    <div style="color: var(--text-secondary); font-size: 0.9rem;">
-        부양가족 수를 입력하세요 (기본공제 1인당 150만원)
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-dependent_text = st.sidebar.text_input(
-    "부양가족 수",
-    value=str(st.session_state.dependent_count) if st.session_state.dependent_count > 0 else "",
-    key="dependent_text",
-    on_change=on_dependent_change,
-    help="부양가족 수를 입력하세요 (예: 2)"
-)
-
-# 경로우대 대상자 수 입력
-def on_elderly_change():
-    try:
-        cleaned_text = st.session_state.elderly_text.replace(',', '')
-        if cleaned_text:
-            if cleaned_text.isdigit():
-                st.session_state.elderly_count = int(cleaned_text)
-                if st.session_state.current_salary > 0:
-                    st.session_state.show_result = True
-    except ValueError:
-        pass
-
-if 'elderly_count' not in st.session_state:
-    st.session_state.elderly_count = 0
-
-st.sidebar.markdown("""
-<div style="margin-bottom: 0.5rem;">
-    <div style="color: var(--text-secondary); font-size: 0.9rem;">
-        경로우대 대상자 수를 입력하세요 (추가공제 1인당 100만원)
-    </div>
-</div>
-""", unsafe_allow_html=True)
-
-elderly_text = st.sidebar.text_input(
-    "경로우대 대상자 수",
-    value=str(st.session_state.elderly_count) if st.session_state.elderly_count > 0 else "",
-    key="elderly_text",
-    on_change=on_elderly_change,
-    help="만 70세 이상 경로우대 대상자 수를 입력하세요 (예: 1)"
-)
