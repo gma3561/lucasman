@@ -1338,10 +1338,18 @@ def calculate_and_show_results():
     st.markdown("""
     <style>
     [data-testid="stSidebar"] {
-        display: none;
+        display: none !important;
+        width: 0px !important;
+        height: 0px !important;
+        visibility: hidden !important;
+        position: absolute !important;
+        z-index: -1 !important;
     }
     </style>
     """, unsafe_allow_html=True)
+    
+    # 메인 화면 초기화
+    st.empty()
     
     # 근로소득공제 계산
     earned_income_ded = calc_earned_income_ded(st.session_state.current_salary)
@@ -1673,7 +1681,12 @@ def reset_calculation():
     st.markdown("""
     <style>
     [data-testid="stSidebar"] {
-        display: block;
+        display: flex !important;
+        width: auto !important;
+        height: auto !important;
+        visibility: visible !important;
+        position: relative !important;
+        z-index: auto !important;
     }
     </style>
     """, unsafe_allow_html=True)
