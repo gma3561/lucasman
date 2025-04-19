@@ -1142,7 +1142,8 @@ with st.sidebar:
         min_value=0,
         value=st.session_state.current_salary,
         step=1000000,
-        format="%d"
+        format="%d",
+        label_visibility="collapsed"
     )
     st.session_state.current_salary = salary
     
@@ -1175,7 +1176,8 @@ with st.sidebar:
         value=st.session_state.credit_card,
         step=1000000,
         format="%d",
-        key="credit_card_input"
+        key="credit_card_input",
+        label_visibility="collapsed"
     )
     st.session_state.credit_card = credit_card
     
@@ -1409,7 +1411,30 @@ def calculate_and_show_results():
     
     with tab1:
         # 간결한 스타일의 테이블 사용
-        st.markdown('<p class="result-subheader">📊 소득공제 전후 세율 구간</p>', unsafe_allow_html=True)
+        st.markdown('<p class="result-subheader">📊 벤처투자 소득공제 전후 세율 구간</p>', unsafe_allow_html=True)
+        
+        # 다른 소득공제를 적용한 후의 과세표준 계산
+        earned_income_ded = calc_earned_income_ded(st.session_state.current_salary)
+        auto_deductions = calculate_default_deductions(st.session_state.current_salary)
+        credit_card_ded = calculate_credit_card_deduction(st.session_state.current_salary, st.session_state.credit_card)
+        
+        base_deductions = sum([
+            earned_income_ded,
+            auto_deductions['personal'],
+            auto_deductions['insurance_total'],
+            credit_card_ded
+        ])
+        
+        # 벤처투자 소득공제 전/후 과세표준
+        pre_venture_taxable = max(0, st.session_state.current_salary - base_deductions)
+        venture_ded = calc_venture(invest_amt)
+        max_ded_by_inc = max(0, pre_venture_taxable)
+        actual_venture_ded = min(venture_ded, max_ded_by_inc)
+        post_venture_taxable = max(0, pre_venture_taxable - actual_venture_ded)
+        
+        # 세율 구간 정보
+        pre_bracket_desc, pre_bracket_rate = get_tax_bracket_info(pre_venture_taxable)
+        post_bracket_desc, post_bracket_rate = get_tax_bracket_info(post_venture_taxable)
         
         st.markdown(f"""
         <div class="scrollable-table-container">
@@ -1421,69 +1446,24 @@ def calculate_and_show_results():
                 <th>한계세율</th>
             </tr>
             <tr>
-                <td>공제 전</td>
-                <td>{pre_taxable:,}원</td>
+                <td>벤처투자 소득공제 전</td>
+                <td>{pre_venture_taxable:,}원</td>
                 <td>{pre_bracket_desc}</td>
                 <td>{pre_bracket_rate:.1f}%</td>
             </tr>
             <tr>
-                <td>공제 후</td>
-                <td>{post_taxable:,}원</td>
+                <td>벤처투자 소득공제 후</td>
+                <td>{post_venture_taxable:,}원</td>
                 <td>{post_bracket_desc}</td>
                 <td>{post_bracket_rate:.1f}%</td>
             </tr>
         </table>
         </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown('<p class="result-subheader">💡 투자 전후 세금 비교</p>', unsafe_allow_html=True)
-        
-        st.markdown(f"""
-        <div class="scrollable-table-container">
-        <table class="comparison-table">
-            <tr>
-                <th>구분</th>
-                <th>투자 전</th>
-                <th>투자 후</th>
-                <th>차액</th>
-            </tr>
-            <tr>
-                <td>과세표준</td>
-                <td>{pre_taxable:,}원</td>
-                <td>{post_taxable:,}원</td>
-                <td class="highlight-number decrease-number">▼ {pre_taxable - post_taxable:,}원</td>
-            </tr>
-            <tr>
-                <td>산출세액</td>
-                <td>{tax_pre_raw:,}원</td>
-                <td>{tax_post_raw:,}원</td>
-                <td class="highlight-number decrease-number">▼ {tax_pre_raw - tax_post_raw:,}원</td>
-            </tr>
-            <tr>
-                <td>결정세액</td>
-                <td>{tax_pre_after:,}원</td>
-                <td>{tax_post_after:,}원</td>
-                <td class="highlight-number decrease-number">▼ {tax_pre_after - tax_post_after:,}원</td>
-            </tr>
-            <tr>
-                <td>지방소득세</td>
-                <td>{local_pre:,}원</td>
-                <td>{local_post:,}원</td>
-                <td class="highlight-number decrease-number">▼ {local_pre - local_post:,}원</td>
-            </tr>
-            <tr>
-                <td>부담세액</td>
-                <td>{total_tax_pre:,}원</td>
-                <td>{total_tax_post:,}원</td>
-                <td class="highlight-number decrease-number">▼ {total_tax_pre - total_tax_post:,}원</td>
-            </tr>
-        </table>
-        </div>
         
         <div class="highlight-box" style="margin-top:1rem;">
-            <p style="font-weight:600; margin-bottom:0.5rem; color:var(--primary-dark);">세율 구간 변동 효과</p>
+            <p style="font-weight:600; margin-bottom:0.5rem; color:var(--primary-dark);">벤처투자 소득공제 효과</p>
             <p style="color:var(--text-secondary); line-height:1.6; margin:0;">
-                벤처기업 투자로 인한 소득공제({actual_venture_ded:,}원)를 통해 과세표준이 <strong>{pre_taxable:,}원</strong>에서 <strong>{post_taxable:,}원</strong>으로 감소했습니다.
+                벤처기업 투자로 인한 소득공제({actual_venture_ded:,}원)를 통해 과세표준이 <strong>{pre_venture_taxable:,}원</strong>에서 <strong>{post_venture_taxable:,}원</strong>으로 감소했습니다.
                 이로 인해 한계세율이 <strong>{pre_bracket_rate:.1f}%</strong>에서 <strong>{post_bracket_rate:.1f}%</strong>로 변동되었습니다.
             </p>
         </div>
