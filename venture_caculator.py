@@ -1334,21 +1334,46 @@ def calculate_credit_card_deduction(salary, credit_card_spending):
     return final_deduction
 
 def calculate_and_show_results():
-    # 사이드바 숨기기
+    # 세션 상태 설정
+    st.session_state.display_results = True
+    
+    # 사이드바와 초기 컨텐츠 숨기기
     st.markdown("""
     <style>
+    /* 사이드바 완전히 숨기기 */
     [data-testid="stSidebar"] {
         display: none !important;
-        width: 0px !important;
-        height: 0px !important;
+        width: 0 !important;
+        height: 0 !important;
+        opacity: 0 !important;
         visibility: hidden !important;
         position: absolute !important;
-        z-index: -1 !important;
+        z-index: -100 !important;
+        pointer-events: none !important;
+    }
+    
+    /* 모든 기존 컨텐츠 숨기기 */
+    .main .block-container > div:not(.element-container:last-of-type) {
+        display: none !important;
+        height: 0 !important;
+        width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        position: absolute !important;
+        pointer-events: none !important;
+        z-index: -100 !important;
+    }
+
+    /* 헤더/푸터 숨기기 */
+    header, footer {
+        display: none !important;
     }
     </style>
     """, unsafe_allow_html=True)
     
-    # 메인 화면 초기화
+    # 메인 화면 초기화 (전체 화면을 지웁니다)
     st.empty()
     
     # 근로소득공제 계산
@@ -1677,21 +1702,38 @@ def calculate_and_show_results():
     
 # 다시 계산하기 함수 정의
 def reset_calculation():
-    # 사이드바 다시 표시
+    # 세션 상태 초기화
+    st.session_state.display_results = False
+    st.session_state.current_salary = None
+    st.session_state.selected_company = None
+    st.session_state.selected_career = None
+    
+    # 숨겨진 요소들 모두 다시 표시
     st.markdown("""
     <style>
+    /* 사이드바 다시 표시 */
     [data-testid="stSidebar"] {
-        display: flex !important;
+        display: block !important;
         width: auto !important;
         height: auto !important;
         visibility: visible !important;
         position: relative !important;
-        z-index: auto !important;
+        z-index: 1 !important;
+    }
+    
+    /* 모든 숨겨진 요소 다시 표시 */
+    div.block-container > div {
+        display: block !important;
+        height: auto !important;
+        margin: auto !important;
+        padding: auto !important;
+        visibility: visible !important;
     }
     </style>
     """, unsafe_allow_html=True)
-    # 결과 화면 상태 초기화
-    st.session_state.show_result = False
+    
+    # 새로고침 (모든 요소 초기화)
+    st.experimental_rerun()
     
 # 결과가 계산된 상태라면 결과를 표시
 if st.session_state.show_result and st.session_state.current_salary > 0:
