@@ -1034,8 +1034,94 @@ if 'dependent_count' not in st.session_state:
 if 'elderly_count' not in st.session_state:
     st.session_state.elderly_count = 0
 
-# 메인 헤더
-st.markdown('<p class="main-header">벤처투자 소득공제 시뮬레이터</p>', unsafe_allow_html=True)
+# 초기 화면 표시
+if not st.session_state.show_result:
+    st.markdown('<p class="main-header">벤처투자 소득공제 시뮬레이터</p>', unsafe_allow_html=True)
+    
+    # 소개 카드 레이아웃
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div class="result-box">
+            <div style="text-align:center; margin-bottom:1rem;">
+                <span style="font-size:2.5rem;">💸</span>
+            </div>
+            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:1rem;">세금 절약 계산</h3>
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem;">
+                벤처기업 투자로 얼마나 세금을 절약할 수 있는지 계산해보세요.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="result-box">
+            <div style="text-align:center; margin-bottom:1rem;">
+                <span style="font-size:2.5rem;">📊</span>
+            </div>
+            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:1rem;">세율 구간 분석</h3>
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem;">
+                소득공제 전후의 세율 구간 변화와 한계세율 효과를 확인하세요.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div class="result-box">
+            <div style="text-align:center; margin-bottom:1rem;">
+                <span style="font-size:2.5rem;">💰</span>
+            </div>
+            <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:1rem;">투자 수익성 분석</h3>
+            <p style="text-align:center; color:var(--text-secondary); margin-bottom:1rem;">
+                현금 리턴과 세금 절감을 통한 최종 수익률을 확인하세요.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # 사용 방법 안내
+    st.markdown("""
+    <div class="result-box">
+        <h3 class="result-title">📋 사용 방법</h3>
+        <ol style="color:var(--text-secondary); padding-left:1.5rem; line-height:1.6;">
+            <li><strong>소득 정보 입력:</strong> 왼쪽 사이드바에서 총급여액, 소득공제 항목, 세액공제, 세액감면 정보를 입력하세요.</li>
+            <li><strong>계산하기 버튼 클릭:</strong> 모든 정보 입력 후 하단의 계산하기 버튼을 클릭하면 결과가 표시됩니다.</li>
+            <li><strong>결과 확인:</strong> 계산 완료 후 결과가 화면에 표시됩니다.</li>
+        </ol>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # 벤처투자 설명
+    st.markdown("""
+    <div class="result-box">
+        <h3 class="result-title">💡 벤처투자 세제혜택 안내</h3>
+        <p style="color:var(--text-secondary); margin-bottom:1rem;">
+            벤처기업에 투자하면 투자금액에 대해 소득공제를 받을 수 있습니다. 소득공제율은 다음과 같습니다:
+        </p>
+        <table class="comparison-table">
+            <tr>
+                <th>투자 금액</th>
+                <th>소득공제율</th>
+            </tr>
+            <tr>
+                <td>3천만원 이하</td>
+                <td>100%</td>
+            </tr>
+            <tr>
+                <td>3천만원 초과 ~ 5천만원 이하</td>
+                <td>70%</td>
+            </tr>
+            <tr>
+                <td>5천만원 초과</td>
+                <td>30%</td>
+            </tr>
+        </table>
+        <p style="color:var(--text-secondary); margin-top:1rem; font-size:0.9rem;">
+            * 본 시뮬레이터는 정확한 세금 계산을 보장하지 않으며 참고용으로만 사용하세요.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # 사이드바에 입력 섹션
 with st.sidebar:
@@ -1056,7 +1142,8 @@ with st.sidebar:
     salary = st.text_input(
         "금액을 입력하세요",
         value=format(st.session_state.current_salary, ',d') if st.session_state.current_salary > 0 else "",
-        key="salary_input"
+        key="salary_input",
+        label_visibility="collapsed"
     )
     
     try:
@@ -1087,7 +1174,8 @@ with st.sidebar:
     credit_card = st.text_input(
         "금액을 입력하세요",
         value=format(st.session_state.credit_card, ',d') if st.session_state.credit_card > 0 else "",
-        key="credit_card_input"
+        key="credit_card_input",
+        label_visibility="collapsed"
     )
     
     try:
@@ -1121,7 +1209,8 @@ with st.sidebar:
         dependent_count = st.text_input(
             "부양가족 수",
             value=str(st.session_state.dependent_count) if st.session_state.dependent_count > 0 else "",
-            key="dependent_count"
+            key="dependent_count",
+            label_visibility="collapsed"
         )
         
         try:
@@ -1141,7 +1230,8 @@ with st.sidebar:
         elderly_count = st.text_input(
             "경로우대 대상자 수",
             value=str(st.session_state.elderly_count) if st.session_state.elderly_count > 0 else "",
-            key="elderly_count"
+            key="elderly_count",
+            label_visibility="collapsed"
         )
         
         try:
