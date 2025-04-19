@@ -10,6 +10,16 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Streamlit 기본 요소 숨기기
+hide_streamlit_style = """
+<style>
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+</style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
 # 커스텀 CSS 추가
 st.markdown("""
 <style>
@@ -38,6 +48,28 @@ st.markdown("""
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     
+    /* 모바일 최적화 */
+    @media (max-width: 768px) {
+        .main-header {
+            font-size: 1.4rem !important;
+            margin-top: 1rem !important;
+        }
+        .result-box {
+            padding: 1rem !important;
+        }
+        .comparison-table td, .comparison-table th {
+            padding: 0.8rem !important;
+            font-size: 0.9rem !important;
+        }
+        .highlight-box {
+            padding: 1rem !important;
+        }
+        .total-profit {
+            font-size: 1.2rem !important;
+            padding: 1.5rem !important;
+        }
+    }
+    
     /* Streamlit 기본 요소 오버라이드 */
     .st-emotion-cache-eczf16, .st-emotion-cache-16txtl3, .st-emotion-cache-1v0mbdj, 
     .st-emotion-cache-1wrcr25, .st-emotion-cache-6qob1r, .st-emotion-cache-1cypcdb, 
@@ -49,7 +81,7 @@ st.markdown("""
     .main-header {
         font-size: 1.8rem;
         font-weight: 700;
-        margin: 0 0 1rem 0;
+        margin: 1.5rem 0 1rem 0;
         color: var(--primary-dark);
         padding: 0.5rem 0;
         border-bottom: 2px solid var(--primary-light);
